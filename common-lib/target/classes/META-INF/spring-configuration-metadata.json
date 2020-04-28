@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "staffjoy.common",
+      "type": "xyz.staffjoy.common.config.StaffjoyProps",
+      "sourceType": "xyz.staffjoy.common.config.StaffjoyProps"
+    }
+  ],
+  "properties": [
+    {
+      "name": "staffjoy.common.deploy-env",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.common.config.StaffjoyProps"
+    },
+    {
+      "name": "staffjoy.common.sentry-dsn",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.common.config.StaffjoyProps"
+    }
+  ],
+  "hints": []
+}

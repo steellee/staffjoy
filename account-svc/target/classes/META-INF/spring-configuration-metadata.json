@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "staffjoy",
+      "type": "xyz.staffjoy.account.props.AppProps",
+      "sourceType": "xyz.staffjoy.account.props.AppProps"
+    }
+  ],
+  "properties": [
+    {
+      "name": "staffjoy.intercom-access-token",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.account.props.AppProps"
+    },
+    {
+      "name": "staffjoy.signing-secret",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.account.props.AppProps"
+    }
+  ],
+  "hints": []
+}

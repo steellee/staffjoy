@@ -1,0 +1,4 @@
+xyz\staffjoy\mail\client\MailClient.class
+xyz\staffjoy\mail\dto\EmailRequest$EmailRequestBuilder.class
+xyz\staffjoy\mail\dto\EmailRequest.class
+xyz\staffjoy\mail\MailConstant.class

@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "staffjoy",
+      "type": "xyz.staffjoy.bot.props.AppProps",
+      "sourceType": "xyz.staffjoy.bot.props.AppProps"
+    }
+  ],
+  "properties": [
+    {
+      "name": "staffjoy.force-email-preference",
+      "type": "java.lang.Boolean",
+      "sourceType": "xyz.staffjoy.bot.props.AppProps",
+      "defaultValue": false
+    }
+  ],
+  "hints": []
+}

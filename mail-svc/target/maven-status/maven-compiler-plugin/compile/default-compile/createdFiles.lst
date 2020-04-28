@@ -1,0 +1,7 @@
+xyz\staffjoy\mail\controller\MailController.class
+META-INF\spring-configuration-metadata.json
+xyz\staffjoy\mail\props\AppProps$AppPropsBuilder.class
+xyz\staffjoy\mail\config\AppConfig.class
+xyz\staffjoy\mail\service\MailSendService.class
+xyz\staffjoy\mail\MailApplication.class
+xyz\staffjoy\mail\props\AppProps.class

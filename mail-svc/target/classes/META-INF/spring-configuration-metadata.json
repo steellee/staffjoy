@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "staffjoy",
+      "type": "xyz.staffjoy.mail.props.AppProps",
+      "sourceType": "xyz.staffjoy.mail.props.AppProps"
+    }
+  ],
+  "properties": [
+    {
+      "name": "staffjoy.aliyun-access-key",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.mail.props.AppProps"
+    },
+    {
+      "name": "staffjoy.aliyun-access-secret",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.mail.props.AppProps"
+    }
+  ],
+  "hints": []
+}

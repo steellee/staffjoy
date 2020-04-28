@@ -1,0 +1,206 @@
+version: '3.7'
+
+services:
+  mysql:
+#      network_mode: "bridge"
+      environment:
+          MYSQL_ROOT_PASSWORD: "123456"
+          MYSQL_USER: 'root'
+          MYSQL_PASS: '123456'
+      image: "mysql:5.7"
+#      restart: always
+      volumes:
+          - "./db:/var/lib/mysql"
+          - "./conf/my.cnf:/etc/my.cnf"
+          - "./init:/docker-entrypoint-initdb.d/"
+      ports:
+          - "23306:3306"
+      networks:
+        - internal_access
+        - external_access
+
+  account-service:
+    build: ./account-svc
+    image: steellee/account-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SIGNING_SECRET
+      - SENTRY_DSN
+      - EMAIL_SERVICE_ENDPOINT
+      - COMPANY_SERVICE_ENDPOINT
+      - BOT_SERVICE_ENDPOINT
+      - INTERCOM_ACCESS_TOKEN
+      - ACCOUNT_DATASOURCE_URL
+      - ACCOUNT_DATASOURCE_USERNAME
+      - ACCOUNT_DATASOURCE_PASSWORD
+    depends_on:
+      - bot-service
+      - email-service
+    networks:
+      - internal_access
+      - external_access # db access
+
+  company-service:
+    build: ./company-svc
+    image: steellee/company-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SIGNING_SECRET
+      - SENTRY_DSN
+      - EMAIL_SERVICE_ENDPOINT
+      - ACCOUNT_SERVICE_ENDPOINT
+      - BOT_SERVICE_ENDPOINT
+      - COMPANY_DATASOURCE_URL
+      - COMPANY_DATASOURCE_USERNAME
+      - COMPANY_DATASOURCE_PASSWORD
+    depends_on:
+      - bot-service
+      - email-service
+    networks:
+      - internal_access
+      - external_access # db access
+
+  bot-service:
+    build: ./bot-svc
+    image: steellee/bot-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SENTRY_DSN
+      - EMAIL_SERVICE_ENDPOINT
+      - ACCOUNT_SERVICE_ENDPOINT
+      - COMPANY_SERVICE_ENDPOINT
+      - SMS_SERVICE_ENDPOINT
+    depends_on:
+      - email-service
+  #      - sms-svc # commented for demo
+    networks:
+      - internal_access
+
+  email-service:
+    build: ./mail-svc
+    image: steellee/mail-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SENTRY_DSN
+      - ALIYUN_ACCESS_KEY
+      - ALIYUN_ACCESS_SECRET
+    networks:
+      - internal_access
+      - external_access # aliyun access
+
+# commented for demo
+#  sms-service:
+#    build: ./sms-svc
+#    image: sms-svc
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=test
+
+  whoami-service:
+    build: ./whoami-svc
+    image: steellee/whoami-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SENTRY_DSN
+      - INTERCOM_APP_ID
+      - INTERCOM_SIGNING_SECRET
+      - ACCOUNT_SERVICE_ENDPOINT
+      - COMPANY_SERVICE_ENDPOINT
+    depends_on:
+      - account-service
+      - company-service
+    networks:
+      - internal_access
+
+# commented for demo
+#  ical-service:
+#    build: ./ical-svc
+#    image: ical-svc
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=test
+#    depends_on:
+#      - company-service
+
+  www-service:
+    build: ./web-app
+    image: steellee/www-svc
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SENTRY_DSN
+      - SIGNING_SECRET
+      - ACCOUNT_SERVICE_ENDPOINT
+      - COMPANY_SERVICE_ENDPOINT
+      - EMAIL_SERVICE_ENDPOINT
+      - RECAPTCHA_PUBLIC
+      - RECAPTCHA_PRIVATE
+    depends_on:
+      - account-service
+      - company-service
+      - email-service
+    networks:
+      - internal_access
+
+  faraday-service:
+    build: ./faraday
+    image: steellee/faraday-svc
+    ports:
+      - 80:80
+    environment:
+      - SPRING_PROFILES_ACTIVE
+      - SERVER_PORT
+      - SENTRY_DSN
+      - SIGNING_SECRET
+    depends_on:
+      - account-service
+      - company-service
+      - www-service
+      - whoami-service
+#      - ical-service # commented for demo
+#      - myaccount-service
+#      - app-service
+    networks:
+      - internal_access
+      - external_access
+
+
+#  myaccount-service:
+#    build:
+#      context: ./frontend
+#      dockerfile: myaccount/Dockerfile
+#    image: steellee/myaccount-spa
+#    networks:
+#      - internal_access
+
+#  app-service:
+#    build:
+#      context: ./frontend
+#      dockerfile: app/Dockerfile
+#    image: steellee/app-spa
+#    networks:
+#      - internal_access
+
+networks:
+  internal_access:
+    internal: true
+    driver: bridge
+    ipam: 
+      driver: default
+      config: 
+      -
+        subnet: 172.21.0.0/16
+        # gateway: 172.21.0.1
+
+  external_access:
+    driver: bridge
+    ipam: 
+      driver: default
+      config: 
+      -
+        subnet: 192.168.48.0/20
+        # gateway: 192.168.48.1
+

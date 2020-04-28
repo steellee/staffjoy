@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "staffjoy",
+      "type": "xyz.staffjoy.web.props.AppProps",
+      "sourceType": "xyz.staffjoy.web.props.AppProps"
+    }
+  ],
+  "properties": [
+    {
+      "name": "staffjoy.recaptcha-public",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.web.props.AppProps"
+    },
+    {
+      "name": "staffjoy.signing-secret",
+      "type": "java.lang.String",
+      "sourceType": "xyz.staffjoy.web.props.AppProps"
+    }
+  ],
+  "hints": []
+}
