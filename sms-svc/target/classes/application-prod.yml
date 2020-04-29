@@ -1,6 +1,0 @@
-logging:
-  config: /etc/staffjoy/logback-spring.xml
-
-staffjoy:
-  white-list-only: false
-  concurrency: 3

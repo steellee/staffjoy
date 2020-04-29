@@ -1,27 +1,25 @@
 version: '3.7'
 
 services:
-  mysql:
-#      network_mode: "bridge"
+  mysql-service:
       environment:
           MYSQL_ROOT_PASSWORD: "123456"
           MYSQL_USER: 'root'
           MYSQL_PASS: '123456'
-      image: "mysql:5.7"
-#      restart: always
-      volumes:
-          - "./db:/var/lib/mysql"
+      image: "mysql:5.7"  # dockerhub上的镜像
+      volumes:  # 增加三个挂载点，不然每次库数据都会被清空
+          - "./db:/var/lib/mysql"  # 将/var/lib/mysql挂载到根目录db
           - "./conf/my.cnf:/etc/my.cnf"
           - "./init:/docker-entrypoint-initdb.d/"
       ports:
-          - "23306:3306"
+          - "23306:3306" # 将3306端口映射出来为23306进行外部访问
       networks:
-        - internal_access
-        - external_access
+        - internal_access # 内网可访问
+        - external_access # 外网可访问
 
   account-service:
     build: ./account-svc
-    image: steellee/account-svc
+    image: steellee/account-svc # 可以指定到自己的dockerhub上的镜像
     environment:
       - SPRING_PROFILES_ACTIVE
       - SERVER_PORT
@@ -149,7 +147,7 @@ services:
     build: ./faraday
     image: steellee/faraday-svc
     ports:
-      - 80:80
+      - 80:80  # 开放访问80端口
     environment:
       - SPRING_PROFILES_ACTIVE
       - SERVER_PORT
@@ -192,15 +190,12 @@ networks:
       driver: default
       config: 
       -
-        subnet: 172.21.0.0/16
-        # gateway: 172.21.0.1
-
+        subnet: 172.21.0.0/16  # 可以指定子网
   external_access:
     driver: bridge
     ipam: 
       driver: default
       config: 
       -
-        subnet: 192.168.48.0/20
-        # gateway: 192.168.48.1
+        subnet: 192.168.48.0/20 # 可以指定子网
 
